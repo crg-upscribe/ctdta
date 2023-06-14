@@ -16,17 +16,22 @@ class CustomerTest extends TestCase
     public function test_customerModel(): void
     {
         $email = $this->faker->email();
-        Customer::factory()->create(['email'=> $email]);
+        Customer::factory()->create(['email' => $email]);
 
-        $this->assertDatabaseHas('customers', ['email'=> $email]);
+        $this->assertDatabaseHas('customers', ['email' => $email]);
     }
 
-    public function test_customerEndPoint(): void
+    public function test_customerEndpoint(): void
     {
+        Customer::factory()->count(4)->create();
+        $count = Customer::count();
+
+        $this->assertEquals(4, $count);
+
         $route = route('api.customers.index');
         $response = $this->get($route);
         $response->assertStatus(Response::HTTP_OK);
-
-        $response->assertJsonCount(4, 'customer');
+        $response->assertJsonCount(4, 'customers');
     }
+
 }

@@ -5,15 +5,25 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use App\Models\Customer;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(JsonResponse $response): JsonResponse
     {
-        return Customer::all();
+        $customers = Customer::query()->get();
+
+
+
+        $data = ['customers' => $customers->toArray()];
+
+        Log::info('controller', $data);
+
+        return $response->setData($data)->send();
     }
 
     /**

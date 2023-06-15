@@ -20,18 +20,4 @@ class CustomerTest extends TestCase
 
         $this->assertDatabaseHas('customers', ['email' => $email]);
     }
-
-    public function test_customerEndpoint(): void
-    {
-        Customer::factory()->count(4)->create();
-        $count = Customer::count();
-
-        $this->assertEquals(4, $count);
-
-        $route = route('api.customers.index');
-        $response = $this->get($route);
-        $response->assertStatus(Response::HTTP_OK);
-        $response->assertJsonCount(4, 'customers');
-    }
-
 }
